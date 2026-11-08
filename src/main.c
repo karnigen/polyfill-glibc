@@ -804,6 +804,31 @@ static const cmdline_mod_t g_cmdline_modifiers[] = {
   {"--use-polyfill-so",       set_use_polyfill_so,          parse_arg_string},
 };
 
+static void print_help(const char* program) {
+  printf("Usage: %s OPTION... FILE...\n\n", program);
+  puts("Inspect or modify ELF executables and shared libraries.");
+  puts("Actions run from left to right for each input file.");
+  puts("Modification actions edit files in-place unless --output is used.");
+  puts("Use FILE '-' to read from standard input, or empty:x86_64 / empty:aarch64 to create an empty ELF.");
+  puts("");
+  puts("Common examples:");
+  printf("  %s --target-glibc=2.39 PROGRAM\n", program);
+  printf("  %s --print-imports PROGRAM\n", program);
+  printf("  %s --target-glibc=2.39 --output=PROGRAM.compat PROGRAM\n", program);
+  puts("");
+  puts("Actions:");
+  for (size_t i = 0; i < sizeof(g_cmdline_actions) / sizeof(*g_cmdline_actions); ++i) {
+    printf("  %s%s\n", g_cmdline_actions[i].syntax, g_cmdline_actions[i].parse_arg ? " VALUE" : "");
+  }
+  puts("");
+  puts("Modifiers:");
+  for (size_t i = 0; i < sizeof(g_cmdline_modifiers) / sizeof(*g_cmdline_modifiers); ++i) {
+    printf("  %s%s\n", g_cmdline_modifiers[i].syntax, g_cmdline_modifiers[i].parse_arg ? " VALUE" : "");
+  }
+  puts("");
+  puts("Options with values accept either --option=VALUE or --option VALUE.");
+}
+
 static void write_out_to(const uint8_t* data, size_t size, const char* path) {
   int fd;
   char* tmp_path = NULL;
@@ -881,6 +906,13 @@ static bool init_from_empty(erw_state_t* erw, cmdline_options_t* opt, const char
 }
 
 int main(int argc, const char** argv) {
+  for (int i = 1; i < argc; ++i) {
+    if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+      print_help(argv[0]);
+      return 0;
+    }
+  }
+
   cmdline_options_t opt;
   memset(&opt, 0, sizeof(opt));
   opt.actions = calloc(argc, sizeof(cmdline_action_t));
