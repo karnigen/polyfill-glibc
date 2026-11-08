@@ -809,6 +809,7 @@ static void print_help(const char* program) {
   puts("Inspect or modify ELF executables and shared libraries.");
   puts("Actions run from left to right for each input file.");
   puts("Modification actions edit files in-place unless --output is used.");
+  puts("Highest partially covered glibc release: 2.44 (x86_64; coverage is incomplete).");
   puts("Use FILE '-' to read from standard input, or empty:x86_64 / empty:aarch64 to create an empty ELF.");
   puts("");
   puts("Common examples:");
