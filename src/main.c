@@ -907,13 +907,6 @@ static bool init_from_empty(erw_state_t* erw, cmdline_options_t* opt, const char
 }
 
 int main(int argc, const char** argv) {
-  for (int i = 1; i < argc; ++i) {
-    if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-      print_help(argv[0]);
-      return 0;
-    }
-  }
-
   cmdline_options_t opt;
   memset(&opt, 0, sizeof(opt));
   opt.actions = calloc(argc, sizeof(cmdline_action_t));
@@ -923,6 +916,10 @@ int main(int argc, const char** argv) {
   arg_buf[0] = '-';
   for (int i = 1; i < argc; ++i) {
     const char* arg = argv[i];
+    if (strcmp(arg, "-h") == 0 || strcmp(arg, "--help") == 0) {
+      print_help(argv[0]);
+      return 0;
+    }
     if (arg[0] != '-' || arg[1] == '\0') { (--fn_end)->arg.s = arg; continue; }
     char* a_out = arg_buf + 1;
     for (++arg;;) {

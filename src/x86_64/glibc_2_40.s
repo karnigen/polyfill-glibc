@@ -134,22 +134,25 @@ public function openat2 {
   endbr64
   push.cfi rbp
   mov.cfi rbp, rsp
+  push 2
+  push rdi
   push rdi
   push rsi
   push rdx
   push rcx
-  call pthread_testcancel
-  pop rcx
+  mov edi, 1
+  lea rsi, [rbp - 8]
+  call pthread_setcanceltype
+  pop r10
   pop rdx
   pop rsi
   pop rdi
-  mov r10, rcx
   mov eax, 437
   syscall
-  push rax
-  push rax
-  call pthread_testcancel
-  pop rcx
+  mov [rsp], rax
+  lea rsi, [rbp - 8]
+  mov edi, dword ptr [rsi]
+  call pthread_setcanceltype
   pop rax
   leave.cfi
   cmp rax, -0xfff

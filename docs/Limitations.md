@@ -10,7 +10,7 @@ Compatibility for these releases is partial; this does not guarantee that an arb
 
 - glibc 2.40 `logp1` variants are redirected to `log1p`; the `exp2m1`, `exp10m1`, `log2p1`, and `log10p1` families are not implemented.
 - glibc 2.41 `sched_getattr` and `sched_setattr` are polyfilled with system calls. The pi-scaled math functions are not implemented.
-- glibc 2.42 unsigned absolute-value functions and the termios baud interfaces are covered. `pthread_gettid_np` and the new mathematical function families are not implemented.
+- glibc 2.42 unsigned absolute-value functions are covered. The numeric termios baud-rate interfaces (`cfgetibaud`, `cfgetobaud`, `cfsetibaud`, `cfsetobaud`, `cfsetbaud`, and the GLIBC_2.42 versions of `cfgetispeed`, `cfgetospeed`, `cfsetispeed`, `cfsetospeed`, and `cfsetspeed`) are not mapped because their numeric rates are incompatible with the legacy interfaces. `pthread_gettid_np` and the new mathematical function families are not implemented.
 - glibc 2.43 sized-free functions, `memalignment`, `memset_explicit`, `mseal`, and `openat2` are covered. `fromfp` and `ufromfp` are not mapped because their return ABI changed. Some newly versioned math symbols are redirected to older versions, which can retain different SVID error-handling behavior.
 - glibc 2.44 `cosh` and `sinh` are redirected to older versions and can likewise retain different SVID error-handling behavior.
 

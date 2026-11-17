@@ -9,6 +9,8 @@ rule link
   command = gcc $cc_opt -o $out $in $link_opt
 rule run
   command = $in $out
+rule test_cli_help
+  command = ./polyfill-glibc --set-soname -h > "$out" && ! grep -q '^Usage:' "$out" && ./polyfill-glibc -h >/dev/null && printf 'OK\n' > "$out"
 rule create_polyfill_so
   command = ./$in empty:$arch --add-hash --add-gnu-hash --create-polyfill-so --target-glibc=$target_glibc --output $out
 rule run_polyfill_glibc_txt
@@ -109,7 +111,7 @@ build build/x86_64/test/glibc_2_38.o: cc test/x86_64/glibc_2_38.c
 
 build build/x86_64/test/glibc_2_40_44.txt: run build/x86_64/test/glibc_2_40_44 build/x86_64/polyfills.so
 build build/x86_64/test/glibc_2_40_44: link build/x86_64/test/glibc_2_40_44.o
-  link_opt = -ldl
+  link_opt = -ldl -pthread
 build build/x86_64/test/glibc_2_40_44.o: cc test/x86_64/glibc_2_40_44.c
 
 build build/x86_64/test/memfd_pread_pwrite.txt: run build/x86_64/test/memfd_pread_pwrite build/x86_64/polyfills.so
@@ -144,6 +146,8 @@ build build/x86_64/test/twalk_r.o: cc test/x86_64/twalk_r.c
 
 build test/x86_64: phony build/x86_64/test/arc4random.txt build/x86_64/test/glibc_2_38.txt build/x86_64/test/glibc_2_40_44.txt build/x86_64/test/qsort_r.txt build/x86_64/test/memfd_pread_pwrite.txt build/x86_64/test/nan.txt build/x86_64/test/stdbit.txt build/x86_64/test/totalorder.txt build/x86_64/test/twalk_r.txt
 
+build build/test/cli_help.txt: test_cli_help polyfill-glibc
+
 build build/test/getauxval.txt: run build/test/getauxval_pf build/test/getauxval_imp.txt build/test/getauxval_imp_pf.txt
 build build/test/getauxval_imp_pf.txt: run_polyfill_glibc_txt build/test/getauxval_pf | polyfill-glibc
   link_opt = --print-imports
@@ -156,4 +160,4 @@ build build/test/getauxval.o: cc test/getauxval.c
 
 build build/test/syscall_filter.o: cc test/syscall_filter.c
 
-build test: phony test/x86_64 build/test/getauxval.txt
+build test: phony test/x86_64 build/test/cli_help.txt build/test/getauxval.txt

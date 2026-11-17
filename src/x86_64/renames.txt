@@ -1525,16 +1525,6 @@ sched_setattr@GLIBC_2.41 polyfill::sched_setattr
 // GLIBC_2.42
 __inet_ntop_chk@GLIBC_2.42 polyfill::__inet_ntop_chk
 __inet_pton_chk@GLIBC_2.42 polyfill::__inet_pton_chk
-cfgetibaud@GLIBC_2.42 cfgetispeed@GLIBC_2.2.5
-cfgetobaud@GLIBC_2.42 cfgetospeed@GLIBC_2.2.5
-cfsetibaud@GLIBC_2.42 cfsetispeed@GLIBC_2.2.5
-cfsetobaud@GLIBC_2.42 cfsetospeed@GLIBC_2.2.5
-cfsetbaud@GLIBC_2.42 cfsetspeed@GLIBC_2.2.5
-cfgetispeed@GLIBC_2.42 cfgetispeed@GLIBC_2.2.5
-cfgetospeed@GLIBC_2.42 cfgetospeed@GLIBC_2.2.5
-cfsetispeed@GLIBC_2.42 cfsetispeed@GLIBC_2.2.5
-cfsetospeed@GLIBC_2.42 cfsetospeed@GLIBC_2.2.5
-cfsetspeed@GLIBC_2.42 cfsetspeed@GLIBC_2.2.5
 uabs@GLIBC_2.42 polyfill::uabs
 ulabs@GLIBC_2.42 polyfill::ulabs
 ullabs@GLIBC_2.42 polyfill::ullabs
