@@ -10,7 +10,7 @@ rule link
 rule run
   command = $in $out
 rule test_cli_help
-  command = ./polyfill-glibc --set-soname -h > "$out" && ! grep -q '^Usage:' "$out" && ./polyfill-glibc -h >/dev/null && printf 'OK\n' > "$out"
+  command = ./polyfill-glibc --set-soname -h > "$out" && ! grep -q '^Usage:' "$out" && ./polyfill-glibc --target-glibc=invalid --help | grep -q '^Usage:' && ./polyfill-glibc -h >/dev/null && printf 'OK\n' > "$out"
 rule create_polyfill_so
   command = ./$in empty:$arch --add-hash --add-gnu-hash --create-polyfill-so --target-glibc=$target_glibc --output $out
 rule run_polyfill_glibc_txt

@@ -920,6 +920,34 @@ int main(int argc, const char** argv) {
       print_help(argv[0]);
       return 0;
     }
+    if (arg[0] != '-' || arg[1] == '\0') continue;
+    char* a_out = arg_buf + 1;
+    bool inline_arg = false;
+    for (++arg;;) {
+      char c = *arg++;
+      if (c == '\0') {
+        *a_out = '\0';
+        break;
+      } else if (c == '=') {
+        *a_out = '\0';
+        inline_arg = true;
+        break;
+      } else if (c == '_') {
+        c = '-';
+      } else if ('A' <= c && c <= 'Z') {
+        c = (c - 'A') + 'a';
+      }
+      *a_out++ = c;
+      if (a_out == arg_buf + sizeof(arg_buf)) break;
+    }
+    cmdline_def_t* d = bsearch(arg_buf, g_cmdline_actions, sizeof(g_cmdline_actions) / sizeof(*g_cmdline_actions), sizeof(*g_cmdline_actions), cmdline_def_cmp);
+    if (!d) {
+      d = (cmdline_def_t*)bsearch(arg_buf, g_cmdline_modifiers, sizeof(g_cmdline_modifiers) / sizeof(*g_cmdline_modifiers), sizeof(*g_cmdline_modifiers), cmdline_def_cmp);
+    }
+    if (d && d->parse_arg && !inline_arg) ++i;
+  }
+  for (int i = 1; i < argc; ++i) {
+    const char* arg = argv[i];
     if (arg[0] != '-' || arg[1] == '\0') { (--fn_end)->arg.s = arg; continue; }
     char* a_out = arg_buf + 1;
     for (++arg;;) {
